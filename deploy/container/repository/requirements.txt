@@ -1,0 +1,7 @@
+torch==2.1.0
+torchvision==0.16.0
+numpy==1.22.0
+scikit-learn
+Pillow
+pandas==2.0.3
+./ait_sdk-0.1.20-py3-none-any.whl

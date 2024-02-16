@@ -1,0 +1,84 @@
+{
+  "name": "eval_correctness_image_classifier_pytorch",
+  "description": "【機械学習モデルの正確性】を評価するため、データセットをランダムに分割し、それぞれの分割されたデータセットを対象としモデルで精度算出すること。その精度差が低ければ、モデルはデータセットに対し汎用的な性能を獲得していると判断すること。",
+  "source_repository": "https://github.com/aistairc/Qunomon_AIT_eval_correctness_image_classifier_pytorch",
+  "version": "1.0",
+  "quality": "https://ait-hub.pj.aist.go.jp/ait-hub/api/0.0.1/qualityDimensions/機械学習品質マネジメントガイドライン第三版/C-1機械学習モデルの正確性",
+  "keywords": [
+    "pytorch",
+    "Image Classification"
+  ],
+  "references": [],
+  "licenses": [
+    "Apache License Version 2.0"
+  ],
+  "inventories": [
+    {
+      "name": "root_dir",
+      "type": "dataset",
+      "description": "評価対象データセットのディレクトリ(すべて画像ファイルを一つフォルダに配置してください)",
+      "requirement": {
+        "format": [
+          "*"
+        ]
+      }
+    },
+    {
+      "name": "pytorch_model",
+      "type": "model",
+      "description": "pytorchでトレーニング済みの画像分類モデル(モデルのアーキテクチャをつけて保存が必要 例:torch.save(model, モデル名称))",
+      "requirement": {
+        "format": [
+          "pt"
+        ]
+      }
+    },
+    {
+      "name": "label",
+      "type": "attribute set",
+      "description": "評価対象データセットの画像ラベル値（CSVタイトル:image_path, lable）",
+      "requirement": {
+        "format": [
+          "csv"
+        ]
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "range_section",
+      "type": "int",
+      "description": "データセット分割のサブセクション数",
+      "default_val": "5"
+    },
+    {
+      "name": "calc_count",
+      "type": "int",
+      "description": "試算回数",
+      "default_val": "5"
+    }
+  ],
+  "report": {
+    "measures": [
+      {
+        "name": "F-value",
+        "type": "float",
+        "description": "各回試算結果をまとめて算出された偏差値",
+        "structure": "single",
+        "min": "0",
+        "max": "1"
+      }
+    ],
+    "resources": []
+  },
+  "downloads": [
+    {
+      "name": "calc_result",
+      "description": "各回試算結果の詳細"
+    },
+    {
+      "name": "Log",
+      "description": "AIT実行ログ"
+    }
+  ]
+}
