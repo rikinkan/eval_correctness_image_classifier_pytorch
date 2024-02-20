@@ -38,7 +38,7 @@
 
 # [uneditable]
 
-# In[ ]:
+# In[1]:
 
 
 # Determine whether to start AIT or jupyter by startup argument
@@ -92,8 +92,8 @@ if not is_ait_launch:
     requirements_generator.add_package('torch','2.1.0')
     requirements_generator.add_package('torchvision','0.16.0')
     requirements_generator.add_package('numpy','1.22.0')
-    requirements_generator.add_package('scikit-learn')
-    requirements_generator.add_package('Pillow')
+    requirements_generator.add_package('scikit-learn', '1.3.1')
+    requirements_generator.add_package('Pillow', '10.0.0')
     requirements_generator.add_package('pandas', '2.0.3')
 
 
@@ -187,7 +187,7 @@ if not is_ait_launch:
                                             type_='int', 
                                             description='試算回数', 
                                             default_val='5')
-    manifest_genenerator.add_ait_measures(name='F-value', 
+    manifest_genenerator.add_ait_measures(name='std_accuracy', 
                                           type_='float', 
                                           description='各回試算結果をまとめて算出された偏差値', 
                                           structure='single',
@@ -258,7 +258,7 @@ ait_manifest.read_json(path_helper.get_manifest_file_path())
 
 
 @log(logger)
-@measures(ait_output, 'F-value')
+@measures(ait_output, 'std_accuracy')
 def measure_acc(root_dir, model, label_path, label_to_int, range_section, calc_count):
     
     # Fomart dataset
@@ -272,18 +272,22 @@ def measure_acc(root_dir, model, label_path, label_to_int, range_section, calc_c
 def evaluate_model_stability(dataset, model, n_splits, n_trials):
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
     trial_accuracies = []
     calc_details = []
 
     for trial in range(n_trials):
+
+        kf = KFold(n_splits=n_splits, shuffle=True, random_state=42 + trial)
         accuracies = []
         sub = 0
         for _, test_index in kf.split(dataset):
             print(f' -------------------- Trial {trial+1}-{sub+1} start -------------------- ')
             print(f'subset : {test_index}')
+            print(f'KFold : {kf}')
             
             subset = Subset(dataset, test_index)
+            print(f'subset : {subset}')
+            print(f'subset length : {len(subset)}')
             loader = DataLoader(subset, batch_size=64, shuffle=True, collate_fn=lambda x: list(zip(*x)))
             
             accuracy = evaluate_model(model, loader, device)
@@ -407,7 +411,7 @@ def main() -> None:
 
 # [uneditable]
 
-# In[16]:
+# In[ ]:
 
 
 if __name__ == '__main__':
@@ -418,7 +422,7 @@ if __name__ == '__main__':
 
 # [required]
 
-# In[17]:
+# In[ ]:
 
 
 ait_owner='AIST'
@@ -429,7 +433,7 @@ ait_creation_year='2024'
 
 # [uneditable] 
 
-# In[18]:
+# In[ ]:
 
 
 if not is_ait_launch:

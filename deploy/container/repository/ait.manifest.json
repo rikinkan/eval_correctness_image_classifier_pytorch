@@ -61,7 +61,7 @@
   "report": {
     "measures": [
       {
-        "name": "F-value",
+        "name": "std_accuracy",
         "type": "float",
         "description": "各回試算結果をまとめて算出された偏差値",
         "structure": "single",
